@@ -12,6 +12,8 @@ ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
 COPY etc/entry.sh "${HOMEDIR}/entry.sh"
 COPY etc/PalWorldSettings.ini "${STEAMAPPDIR}/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini"
 
+VOLUME ["${STEAMAPPDIR}/Pal/Saved"]
+
 RUN set -x \
 	# Install, update & upgrade packages
 	&& apt-get update \
