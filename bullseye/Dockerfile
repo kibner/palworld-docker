@@ -10,7 +10,7 @@ ENV STEAMAPP palworld
 ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
 
 COPY etc/entry.sh "${HOMEDIR}/entry.sh"
-COPY etc/server.cfg "${STEAMAPPDIR}/game/csgo/cfg/server.cfg"
+COPY etc/PalWorldSettings.ini "${STEAMAPPDIR}/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini"
 
 RUN set -x \
 	# Install, update & upgrade packages
