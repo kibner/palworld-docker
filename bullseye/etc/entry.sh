@@ -1,5 +1,6 @@
 #!/bin/bash
 mkdir -p "${STEAMAPPDIR}" || true
+echo ${STEAMAPPDIR}
 
 # Download Updates
 
@@ -74,6 +75,8 @@ sed -i -e "s/{{SERVER_SERVER_NAME}}/${PALWORLD_SERVER_NAME}/g" \
 
 # Switch to server directory
 cd "${STEAMAPPDIR}"
+
+echo $(ls)
 
 # Start Server
 ./PalServer.sh "${PALWORLD_ADDITIONAL_ARGS}"
