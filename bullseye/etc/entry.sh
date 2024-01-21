@@ -1,9 +1,7 @@
 #!/bin/bash
 mkdir -p "${STEAMAPPDIR}" || true
-echo ${STEAMAPPDIR}
 
 # Download Updates
-
 bash "${STEAMCMDDIR}/steamcmd.sh" +force_install_dir "${STEAMAPPDIR}" \
 				+login anonymous \
 				+app_update "${STEAMAPPID}" validate \
@@ -75,8 +73,6 @@ sed -i -e "s/{{SERVER_SERVER_NAME}}/${PALWORLD_SERVER_NAME}/g" \
 
 # Switch to server directory
 cd "${STEAMAPPDIR}"
-
-echo $(ls)
 
 # Start Server
 ./PalServer.sh "${PALWORLD_ADDITIONAL_ARGS}"
