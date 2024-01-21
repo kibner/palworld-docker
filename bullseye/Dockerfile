@@ -1,18 +1,16 @@
 ###########################################################
 # Dockerfile that builds a Palworld dedicated server
 ###########################################################
-FROM cm2network/steamcmd:root as build_stage
+FROM cm2network/steamcmd:latest as build_stage
+USER root
 
 LABEL maintainer="kibner@gmail.com"
 
 ENV STEAMAPPID 2394010
-ENV STEAMAPP palworld
-ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
+ENV STEAMAPPDIR "${HOMEDIR}/palworld-server"
 
-COPY etc/entry.sh "${HOMEDIR}/entry.sh"
-COPY etc/PalWorldSettings.ini "${STEAMAPPDIR}/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini"
-
-VOLUME ["${STEAMAPPDIR}"]
+COPY etc/entry.sh "${HOMEDIR}/"
+COPY etc/PalWorldSettings.ini "${STEAMAPPDIR}/Pal/Saved/Config/LinuxServer/"
 
 RUN set -x \
 	# Install, update & upgrade packages
@@ -26,21 +24,21 @@ RUN set -x \
 	&& chmod +x "${HOMEDIR}/entry.sh" \
 	&& chown -R "${USER}:${USER}" "${HOMEDIR}/entry.sh" "${STEAMAPPDIR}" \
 	# Clean up
-	&& rm -rf /var/lib/apt/lists/* 
+	&& rm -rf /var/lib/apt/lists/*
 
 FROM build_stage AS bullseye-base
 
-ENV PALWORLD_SERVER_NAME="New \"${STEAMAPP}\" Server" \
-    PALWORLD_SERVER_DESCRIPTION="" \
-    PALWORLD_ADMIN_PASSWORD="" \
-    PALWORLD_SERVER_PASSWORD="" \
+ENV PALWORLD_SERVER_NAME="New Palworld Server" \
+    PALWORLD_SERVER_DESCRIPTION= \
+    PALWORLD_ADMIN_PASSWORD= \
+    PALWORLD_SERVER_PASSWORD= \
     PALWORLD_PUBLIC_PORT=8211 \
-    PALWORLD_PUBLIC_IP="" \
+    PALWORLD_PUBLIC_IP= \
     PALWORLD_RCON_ENABLED=False \
     PALWORLD_RCON_PORT=25575 \
-    PALWORLD_REGION="" \
+    PALWORLD_REGION= \
     PALWORLD_B_USE_AUTH=True \
-    PALWORLD_BAN_LIST_URL="https://api.palworldgame.com/api/banlist.txt" \
+    PALWORLD_BAN_LIST_URL=https://api.palworldgame.com/api/banlist.txt \
     PALWORLD_COOP_PLAYER_MAX_NUM=4 \
     PALWORLD_SERVER_PLAYER_MAX_NUM=32 \
     PALWORLD_DIFFICULTY=None \
@@ -92,12 +90,14 @@ ENV PALWORLD_SERVER_NAME="New \"${STEAMAPP}\" Server" \
     PALWORLD_B_IS_START_LOCATION_SELECT_BY_MAP=True \
     PALWORLD_B_EXIST_PLAYER_AFTER_LOGOUT=False \
     PALWORLD_B_ENABLE_DEFENSE_OTHER_GUILD_PLAYER=False \
-    PALWORLD_ADDITIONAL_ARGS=""
+    PALWORLD_ADDITIONAL_ARGS=
 
 # Switch to user
 USER ${USER}
 
 WORKDIR ${HOMEDIR}
+
+VOLUME ["${STEAMAPPDIR}"]
 
 CMD ["bash", "entry.sh"]
 
